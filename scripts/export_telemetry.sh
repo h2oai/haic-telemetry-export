@@ -17,7 +17,7 @@ kubectl apply -f scripts/Job.yaml --namespace=$NAMESPACE
 echo "Waiting 120s until pod starts up ..."
 sleep 120
 
-pod=$(kubectl get pods -n telemetry --output=jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | grep haic-telemetry-export)
+pod=$(kubectl get pods --namespace=$NAMESPACE --output=jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | grep haic-telemetry-export)
 echo "Running on $pod"
 
 # wait until sql query execution is finished
@@ -36,7 +36,7 @@ done
 
 echo "Starting downloading telemetry data..."
 mkdir data
-kubectl cp -n telemetry $pod:/workspace/data ./data
+kubectl cp --namespace=$NAMESPACE $pod:/workspace/data ./data
 echo "Telemetry data download finished."
 
 echo "Deleting job ..."
