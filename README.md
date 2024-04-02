@@ -32,7 +32,7 @@ git clone https://github.com/h2oai/haic-telemetry-export.git \
         - example for minikube: `minikube`
     - `NAMESPACE` - Namespace for the telemetry services
         - example: `telemetry`
-    - `TELMETRY_DB_DSN` - DSN for the telemetry database
+    - `TELMETRY_DB_DSN` - Database Source Name (DSN) for the telemetry database
 
        DSN requires `username`, `password`, `hostname`, `port`, & `database_name` as specified below.
         - example: `postgres://username:password@hostname:port/database_name?sslmode=require`
@@ -79,7 +79,7 @@ __NOTE__:If above 2 steps cannot be executed, bundled Docker image & repository 
         ``` 
     - `NAMESPACE` - Namespace for the telemetry services
         - example: `telemetry`
-    - `TELMETRY_DB_DSN` - Database Source Name(DSN) for the telemetry database
+    - `TELMETRY_DB_DSN` - Database Source Name (DSN) for the telemetry database
         
         DSN requires `username`, `password`, `hostname`, `port`, & `database_name` as specified below.
         - example: `postgres://username:password@hostname:port/database_name?sslmode=require`
