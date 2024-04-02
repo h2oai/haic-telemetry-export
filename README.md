@@ -1,24 +1,41 @@
 # HAIC Telemetry Export
 
-## User Guide
+
+## Usage - Non Air Gapped Environment
 
 ### Prerequisites
 
 - Make sure you have following installed
     - kubectl
 - Make sure you have access to the cluster and you have updated the `kubeconfig` file accordingly.
+    - [Authenticating to AWS EKS clusters](https://docs.aws.amazon.com/eks/latest/userguide/create-kubeconfig.html)
+    - [Authenticating to GCP GKE clusters](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl)
+    - [Authenticating to Azure  AKS clusters](https://learn.microsoft.com/en-us/cli/azure/aks?view=azure-cli-latest#az-aks-get-credentials)
 
-### Usage
+### Steps
 
-1. Clone the repository
+1. Clone the repository using following command and goto the directory.
+```bash
+git clone https://github.com/h2oai/haic-telemetry-export.git \
+    && cd haic-telemetry-export
+```
 2. Edit the following values in `scripts/export_telemetry.sh`
-    - `CONTEXT` - Context name for the cluster 
+    - `CONTEXT` - Context name for the cluster
+
+        You can use following command to list the available contexts
+        ```bash
+        kubectl config get-contexts
+        ``` 
         - example for AWS: `arn:aws:eks:us-east-1:470338458334:cluster/abcd`
+        - example for GCP: `gke_my_project_us-central1-abcd`
+        - example for Azure: `aks_abcd`
         - example for minikube: `minikube`
     - `NAMESPACE` - Namespace for the telemetry services
         - example: `telemetry`
     - `TELMETRY_DB_DSN` - DSN for the telemetry database
-        - example: `postgres://username:password@telemetry_database_name.rg2xcciz10ag.us-east-1.rds.amazonaws.com:5432/telemetry?sslmode=require`
+
+       DSN requires `username`, `password`, `hostname`, `port`, & `database_name` as specified below.
+        - example: `postgres://username:password@hostname:port/database_name?sslmode=require`
 3. Execute the shell script using following commands
 ```bash
     chmod +x ./scripts/export_telemetry.sh
@@ -26,30 +43,49 @@
 ```
 4. Telemetry data will be downloaded to the `data` directory.
 
-<!-- ## User Guide - Managed Cloud
+### Usage - Air Gapped Environment
 
 ### Prerequisites
+
 - Make sure you have following installed
     - kubectl
-- Make sure you have access to the cluster and you have updated the `kubeconfig` file accordingly. You can use following command to update the `kubeconfig`
 
+### Steps
+1. Clone the repository using following command and goto the directory.
 ```bash
-aws eks --region <region> update-kubeconfig --name <cluster_name>
+git clone https://github.com/h2oai/haic-telemetry-export.git \
+    && cd haic-telemetry-export
 ```
 
-### Usage
+2. Build the runtime docker image using following command
+```bash
+docker build -t haic-telemetry-exporter -f Dockerfile . 
+```
+__NOTE__:If above 2 steps cannot be executed, bundled Docker image & repository can be provided.
 
-1. Clone the repository
-2. Edit the following values in `scripts/export_telemetry.sh`
-    - `CONTEXT` - AWS ARN for the cluster 
-        - example: `arn:aws:eks:us-east-1:470338458334:cluster/abcd`
+3. Change the image value of `scripts/Job.yaml` to `haic-telemetry-exporter`.
+
+```diff
+-   image: gcr.io/vorvan/h2oai/haic-telemetry-exporter:latest
++  haic-telemetry-exporter
+```
+
+4. Edit the following values in `scripts/export_telemetry.sh`
+    - `CONTEXT` - Context name for the cluster
+    
+        You can use following command to list the available contexts
+        ```bash
+        kubectl config get-contexts
+        ``` 
     - `NAMESPACE` - Namespace for the telemetry services
         - example: `telemetry`
-    - `TELMETRY_DB_DSN` - DSN for the telemetry database
-        - example: `postgres://username:password@telemetry_database_name.rg2xcciz10ag.us-east-1.rds.amazonaws.com:5432/telemetry?sslmode=require`
-3. Execute the shell script using following commands
+    - `TELMETRY_DB_DSN` - Database Source Name(DSN) for the telemetry database
+        
+        DSN requires `username`, `password`, `hostname`, `port`, & `database_name` as specified below.
+        - example: `postgres://username:password@hostname:port/database_name?sslmode=require`
+5. Execute the shell script using following commands
 ```bash
     chmod +x ./scripts/export_telemetry.sh
     ./scripts/export_telemetry.sh
 ```
-4. Telemetry data will be downloaded to the `data` directory. -->
+6. Telemetry data will be downloaded to the `data` directory.
