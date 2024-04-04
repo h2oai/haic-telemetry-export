@@ -27,7 +27,7 @@ echo "Running on $pod"
 # wait until sql query execution is finished
 while :
 do
-    VAR_VALUE=$(kubectl exec $pod --namespace=$NAMESPACE -- cat /workspace/TELEMETRY_EXPORT_STATUS)
+    VAR_VALUE=$(kubectl exec $pod --container=haic-telemetry-export-runtime --namespace=$NAMESPACE -- cat /workspace/TELEMETRY_EXPORT_STATUS)
 
     if [ "$VAR_VALUE" = "1" ]; then
         echo "sql query execution is finished."
@@ -40,9 +40,11 @@ done
 
 echo "Starting downloading telemetry data..."
 mkdir data
-kubectl cp --namespace=$NAMESPACE $pod:/workspace/data ./data
+kubectl cp --container=haic-telemetry-export-runtime --namespace=$NAMESPACE $pod:/workspace/data ./data
 echo "Telemetry data download finished."
 
 echo "Deleting job ..."
 kubectl delete job haic-telemetry-export --namespace=$NAMESPACE
+
+echo "Deleting secret ..."
 kubectl delete secret telemetry-db-secret --namespace=$NAMESPACE
