@@ -20,7 +20,7 @@ Calculates the `resource utilization` used by each `engine` hourly
 
 Given that:
 - **stream**: One of value `starting` / `pausing` / `deleting`
-- **user_name**: 
+- **user_name**: Keycloak preferred username
 - **enginename**: Name of the engine
 - **type**: Type of the engine
 - **version**: Version
@@ -38,7 +38,7 @@ Returns telemetry data for `app events`
 
 Given that:
 - **stream**: stream of the app event
-- **username**: 
+- **username**: Keycloak preferred username
 - **label**: payload data
 - **ts**: timestamp
 
@@ -59,7 +59,17 @@ Given that:
 
 ## 5. `hourly_max_ai_units_cat.sql`
 
+Calculates the maximum ai_units with other resource utilization hourly
 
+- **time_interval**: calculated hour
+- **resource**: resource name
+- **ram_gi**: RAM in Gigabytes
+- **ram_gi_ai_unit_hours**: $$ram\_gi\_ai\_unit\_hours=\frac{ram\_gi}{64}$$
+- **cpu**: CPU units (converted from millicpus to CPU units in the precursor step)
+- **cpu_ai_unit_hours**: $$cpu\_ai\_unit\_hours=\frac{cpu}{8}$$
+- **gpu**: Count of GPUs
+- **gpu_ai_unit_hours**: $$cpu\_ai\_unit\_hours={gpu}\times{8}$$
+- **ai_units** $$ai\_units = \max\left(\max\left(\frac{ram\_gi}{64}, \frac{cpu}{8}\right) - gpu, 0\right) + (gpu \times 4)$$ 
 
 ## 6. `hourly_max_ai_units.sql`
 
@@ -73,6 +83,17 @@ $$ai\_units = \max\left(\left(\max\left(\left(\frac{ram\_gi} {ram\_gi\_per\_ai\_
 
 ## 7. `instance_events.sql`
 
+Returns summary of events of the instances
+
+Given that:
+- **stream**: stream of the app event
+- **username**: Keycloak preferred username
+- **label**: payload data
+- **ts**: timestamp
+
 ## 8. `user_login_data.sql`
 
 Retrieves data related to user login events from the app store.
+
+- **username**: Keycloak preferred username
+- **ts**: timestamp
