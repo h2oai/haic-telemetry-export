@@ -89,3 +89,22 @@ __NOTE__:If above 2 steps cannot be executed, bundled Docker image & repository 
     ./scripts/export_telemetry.sh
 ```
 6. Telemetry data will be downloaded to the `data` directory.
+
+## What's Included in the Data
+
+### Telemetry Table
+
+Telemetry table contains following data.
+
+| Column        | Description                                                                                                                               |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`            | Unique ID for the entry                                                                                                                   |
+| `ts`            | Timestamp                                                                                                                                 |
+| `payload`       |                                                                                                                                           |
+| `resource_type` |                                                                                                                                           |
+| `resource_id`   | ID of the resource of the type listed                                                                                                     |
+| `stream`        | Type of payload                                                                                                                           |
+| `source`        |                                                                                                                                           |
+| `kind`          |                                                                                                                                           |
+| `user_id`       | Keycloak subject (usually a uuid)                                                                                                         |
+| `user_name`     | Keycloak preferred username (usually an email, users can change their email, but the id/uuid/subject stays constant and follows the user) |
