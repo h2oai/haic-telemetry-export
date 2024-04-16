@@ -37,6 +37,8 @@ git clone https://github.com/h2oai/haic-telemetry-export.git \
 
        DSN requires `username`, `password`, `hostname`, `port`, & `database_name` as specified below.
         - example: `postgres://username:password@hostname:port/database_name?sslmode=require`
+
+        __Note__: `sslmode` can be only one of these values `require`, `disable`. Otherwise remove the `sslmode` parameter from the DSN.
 3. Execute the shell script using following commands
 ```bash
     chmod +x ./scripts/export_telemetry.sh
@@ -85,6 +87,8 @@ __NOTE__:If above 2 steps cannot be executed, bundled Docker image & repository 
         
         DSN requires `username`, `password`, `hostname`, `port`, & `database_name` as specified below.
         - example: `postgres://username:password@hostname:port/database_name?sslmode=require`
+
+        __Note__: `sslmode` can be only one of these values `require`, `disable`. Otherwise remove the `sslmode` parameter from the DSN.
 5. Execute the shell script using following commands
 ```bash
     chmod +x ./scripts/export_telemetry.sh
@@ -103,7 +107,7 @@ Telemetry table contains following data.
 | `id`            | Unique ID for the entry                                                                                                                   |
 | `ts`            | Timestamp                                                                                                                                 |
 | `payload`       | Contains JSON representation of the payload. Refer [docs/payload](docs/payload.md) for more details                                       |
-| `resource_type` | Supported resource types. Refer[docs/resource_type.md](docs/resource_type.md) for more details                                            |
+| `resource_type` | Supported resource types. Refer [docs/resource_type.md](docs/resource_type.md) for more details                                            |
 | `resource_id`   | ID of the resource of the type listed                                                                                                     |
 | `stream`        | Type of payload                                                                                                                           |
 | `source`        | ID of the workload that emitted it                                                                                                        |
