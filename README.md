@@ -5,6 +5,7 @@
 
 ### Prerequisites
 
+- HAIC cluster should have a `postgres` telemetry database
 - Make sure you have following installed
     - kubectl
 - Make sure you have access to the cluster and you have updated the `kubeconfig` file accordingly.
@@ -47,6 +48,7 @@ git clone https://github.com/h2oai/haic-telemetry-export.git \
 
 ### Prerequisites
 
+- HAIC cluster should have a `postgres` telemetry database
 - Make sure you have following installed
     - kubectl
 
@@ -89,3 +91,31 @@ __NOTE__:If above 2 steps cannot be executed, bundled Docker image & repository 
     ./scripts/export_telemetry.sh
 ```
 6. Telemetry data will be downloaded to the `data` directory.
+
+## What's Included in the Data
+
+### Telemetry Table
+
+Telemetry table contains following data.
+
+| Column        | Description                                                                                                                               |
+|---------------|-------------------------------------------------------------------------------------------------------------------------------------------|
+| `id`            | Unique ID for the entry                                                                                                                   |
+| `ts`            | Timestamp                                                                                                                                 |
+| `payload`       | Contains JSON representation of the payload. Refer [docs/payload](docs/payload.md) for more details                                       |
+| `resource_type` | Supported resource types. Refer[docs/resource_type.md](docs/resource_type.md) for more details                                            |
+| `resource_id`   | ID of the resource of the type listed                                                                                                     |
+| `stream`        | Type of payload                                                                                                                           |
+| `source`        | ID of the workload that emitted it                                                                                                        |
+| `kind`          | Can be one of `0` - Unspecified, `1` - Event, & `2` - Gauge Metric                                                                        |
+| `user_id`       | Keycloak subject (usually a uuid)                                                                                                         |
+| `user_name`     | Keycloak preferred username (usually an email, users can change their email, but the id/uuid/subject stays constant and follows the user) |
+
+- SQL queries related data can be found in [docs/sql.md](docs/sql.md)
+
+__NOTE__: Sample data can be found in [sample-data](sample-data)
+
+## FAQ
+
+### 1. CSV files does not contain any data
+There can be scenarios where data that matches the SQL query is not available in the telemetry database
