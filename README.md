@@ -108,3 +108,4 @@ Telemetry table contains following data.
 | `kind`          |                                                                                                                                           |
 | `user_id`       | Keycloak subject (usually a uuid)                                                                                                         |
 | `user_name`     | Keycloak preferred username (usually an email, users can change their email, but the id/uuid/subject stays constant and follows the user) |
+
