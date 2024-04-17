@@ -10,11 +10,11 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: haic-telemetry-export-runtime
-        image: gcr.io/vorvan/h2oai/haic-telemetry-exporter:latest
+        image: gcr.io/vorvan/h2oai/haic-telemetry-exporter:experimental
         env:
           - name: DB_DSN
             valueFrom:
               secretKeyRef:
-                name: telemetry-db-secret
-                key: DB_DSN
+                name: hac-telemetry-secrets
+                key: dsn
         imagePullPolicy: Always

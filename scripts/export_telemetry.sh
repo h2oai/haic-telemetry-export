@@ -2,21 +2,40 @@
 
 set -o errexit
 
-# Configure below values before executing the script
-CONTEXT=
-NAMESPACE=
-TELMETRY_DB_DSN=
+cat <<EOF > Job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: haic-telemetry-export
+spec:
+  template:
+    metadata:
+      name: haic-telemetry-export
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: haic-telemetry-export-runtime
+        image: gcr.io/vorvan/h2oai/haic-telemetry-exporter:v1.0.0
+        env:
+          - name: DB_DSN
+            valueFrom:
+              secretKeyRef:
+                name: hac-telemetry-secrets
+                key: dsn
+        imagePullPolicy: Always
+EOF
 
-ENCODED_DB_DSN=$(echo -n $TELMETRY_DB_DSN | base64)
+CONTEXT=$(kubectl config current-context)
+NAMESPACE=$(kubectl get namespace | grep "telemetry" | awk '{print $1}')
 
-kubectl config use-context $CONTEXT
-
-awk -v db_dsn="$ENCODED_DB_DSN" '{gsub("_SUB_DB_DSN_", db_dsn)} 1' scripts/secret.yaml > temp && mv temp scripts/secret.yaml
+if [ -n "$NAMESPACE" ]; then
+    echo "Namespace 'telemetry' exists" 
+else 
+    echo "Namespace 'telemetry' does not exist." 
+fi
 
 echo "Starting job ..."
-kubectl apply -f scripts/secret.yaml --namespace=$NAMESPACE
-kubectl apply -f scripts/Job.yaml --namespace=$NAMESPACE 
-
+kubectl apply -f Job.yaml --namespace=$NAMESPACE 
 
 echo "Waiting 120s until pod starts up ..."
 sleep 120
@@ -45,6 +64,3 @@ echo "Telemetry data download finished."
 
 echo "Deleting job ..."
 kubectl delete job haic-telemetry-export --namespace=$NAMESPACE
-
-echo "Deleting secret ..."
-kubectl delete secret telemetry-db-secret --namespace=$NAMESPACE
