@@ -2,6 +2,29 @@
 
 set -o errexit
 
+cat <<EOF > Job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: haic-telemetry-export
+spec:
+  template:
+    metadata:
+      name: haic-telemetry-export
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: haic-telemetry-export-runtime
+        image: gcr.io/vorvan/h2oai/haic-telemetry-exporter:experimental
+        env:
+          - name: DB_DSN
+            valueFrom:
+              secretKeyRef:
+                name: hac-telemetry-secrets
+                key: dsn
+        imagePullPolicy: Always
+EOF
+
 CONTEXT=$(kubectl config current-context)
 NAMESPACE=$(kubectl get namespace | grep "telemetry" | awk '{print $1}')
 
