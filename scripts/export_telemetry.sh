@@ -35,7 +35,7 @@ else
 fi
 
 echo "Starting job ..."
-kubectl apply -f scripts/Job.yaml --namespace=$NAMESPACE 
+kubectl apply -f Job.yaml --namespace=$NAMESPACE 
 
 echo "Waiting 120s until pod starts up ..."
 sleep 120
