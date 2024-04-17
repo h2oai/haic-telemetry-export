@@ -15,7 +15,7 @@ spec:
       restartPolicy: OnFailure
       containers:
       - name: haic-telemetry-export-runtime
-        image: gcr.io/vorvan/h2oai/haic-telemetry-exporter:experimental
+        image: gcr.io/vorvan/h2oai/haic-telemetry-exporter:v1.0.0
         env:
           - name: DB_DSN
             valueFrom:
