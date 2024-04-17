@@ -43,7 +43,7 @@ Telemetry table contains following data.
 | `id`            | Unique ID for the entry                                                                                                                   |
 | `ts`            | Timestamp                                                                                                                                 |
 | `payload`       | Contains JSON representation of the payload. Refer [docs/payload](docs/payload.md) for more details                                       |
-| `resource_type` | Supported resource types. Refer[docs/resource_type.md](docs/resource_type.md) for more details                                            |
+| `resource_type` | Supported resource types. Refer [docs/resource_type.md](docs/resource_type.md) for more details                                            |
 | `resource_id`   | ID of the resource of the type listed                                                                                                     |
 | `stream`        | Type of payload                                                                                                                           |
 | `source`        | ID of the workload that emitted it                                                                                                        |
