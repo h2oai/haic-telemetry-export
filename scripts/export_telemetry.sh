@@ -2,21 +2,17 @@
 
 set -o errexit
 
-# Configure below values before executing the script
-CONTEXT=
-NAMESPACE=
-TELMETRY_DB_DSN=
+CONTEXT=$(kubectl config current-context)
+NAMESPACE=$(kubectl get namespace | grep "telemetry" | awk '{print $1}')
 
-ENCODED_DB_DSN=$(echo -n $TELMETRY_DB_DSN | base64)
-
-kubectl config use-context $CONTEXT
-
-awk -v db_dsn="$ENCODED_DB_DSN" '{gsub("_SUB_DB_DSN_", db_dsn)} 1' scripts/secret.yaml > temp && mv temp scripts/secret.yaml
+if [ -n "$NAMESPACE" ]; then
+    echo "Namespace 'telemetry' exists" 
+else 
+    echo "Namespace 'telemetry' does not exist." 
+fi
 
 echo "Starting job ..."
-kubectl apply -f scripts/secret.yaml --namespace=$NAMESPACE
 kubectl apply -f scripts/Job.yaml --namespace=$NAMESPACE 
-
 
 echo "Waiting 120s until pod starts up ..."
 sleep 120
@@ -45,6 +41,3 @@ echo "Telemetry data download finished."
 
 echo "Deleting job ..."
 kubectl delete job haic-telemetry-export --namespace=$NAMESPACE
-
-echo "Deleting secret ..."
-kubectl delete secret telemetry-db-secret --namespace=$NAMESPACE
