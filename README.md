@@ -21,7 +21,7 @@
 curl https://raw.githubusercontent.com/h2oai/haic-telemetry-export/main/scripts/export_telemetry.sh | bash
 ```
 
-### Usage - Air Gapped Environment
+## Usage - Air Gapped Environment
 
 ### Prerequisites
 
