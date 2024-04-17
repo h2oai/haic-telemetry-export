@@ -17,7 +17,6 @@
 
 1. Run the following command and telemetry data will be downloaded to the `data` directory.
 
-```bash
 curl https://raw.githubusercontent.com/h2oai/haic-telemetry-export/main/scripts/export_telemetry.sh | bash
 ```
 
