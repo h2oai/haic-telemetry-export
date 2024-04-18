@@ -2,6 +2,8 @@
 
 set -o errexit
 
+SECRET_NAME=$(kubectl get secret -n telemetry | grep 'telemetry-secrets' | awk '{print $1}')
+
 cat <<EOF > Job.yaml
 apiVersion: batch/v1
 kind: Job
@@ -20,7 +22,7 @@ spec:
           - name: DB_DSN
             valueFrom:
               secretKeyRef:
-                name: hac-telemetry-secrets
+                name: $SECRET_NAME
                 key: dsn
         imagePullPolicy: Always
 EOF
