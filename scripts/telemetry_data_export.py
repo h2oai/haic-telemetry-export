@@ -35,6 +35,7 @@ def main():
 
     os.mkdir("./data")
     sql_scripts = [
+        "no_of_deployments",
         "ai_unit_hourly",
         "aiem",
         "app_events",
