@@ -1,9 +1,7 @@
 name: Build and Push Docker Image to GCR
 
 on:
-  push:
-    branches:
-      - devops/chathurinda/add-gh-workflow-to-publish-image
+  workflow_dispatch:
 
 jobs:
   build-and-push:
