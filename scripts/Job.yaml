@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: haic-telemetry-export
+spec:
+  template:
+    metadata:
+      name: haic-telemetry-export
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: haic-telemetry-export-runtime
+        image: gcr.io/vorvan/h2oai/haic-telemetry-exporter:latest
+        env:
+          - name: DB_DSN
+            valueFrom:
+              secretKeyRef:
+                name: jv-2407-dev-telemetry-secrets
+                key: dsn
+        imagePullPolicy: Always
