@@ -66,3 +66,7 @@ echo "Telemetry data download finished."
 
 echo "Deleting job ..."
 kubectl delete job haic-telemetry-export --namespace=$NAMESPACE
+
+
+output_file="data/runtimes.txt"
+kubectl get pods -n mlops -o json | jq -r '.items[] | select(.metadata.name | startswith("pr-")) | "\(.metadata.labels["app.mlops.h2o.ai/runtime-id"]): \(.metadata.name)"' > "$output_file"
